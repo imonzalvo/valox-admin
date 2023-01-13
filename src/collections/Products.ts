@@ -1,13 +1,19 @@
 import { CollectionConfig } from 'payload/types';
+import { isAdminOrProductOwner } from '../access/isAdminOrProductOwner';
 
 const Products: CollectionConfig = {
   slug: 'products',
   admin: {
-    defaultColumns: ['title', 'image'],
+    defaultColumns: ['title', 'price'],
     useAsTitle: 'Productos',
   },
   access: {
-    read: () => true,
+    // Admins can read all, but any other logged in user can only read themselves
+    read: isAdminOrProductOwner,
+    // Admins can update all, but any other logged in user can only update themselves
+    update: isAdminOrProductOwner,
+    // Only admins can delete
+    delete: isAdminOrProductOwner,
   },
   fields: [
     {
@@ -15,13 +21,15 @@ const Products: CollectionConfig = {
       type: 'text',
     },
     {
-      name: 'author',
-      type: 'relationship',
-      relationTo: 'users',
+      name: 'price',
+      type: 'number',
     },
     {
-      name: 'publishedDate',
-      type: 'date',
+      name: 'creator',
+      type: 'relationship',
+      relationTo: 'users',
+      hidden: true,
+      defaultValue: ({ user }) => (user.company)
     },
     {
       name: 'category',
@@ -53,7 +61,7 @@ const Products: CollectionConfig = {
           label: 'Published',
         },
       ],
-      defaultValue: 'draft',
+      defaultValue: 'published',
       admin: {
         position: 'sidebar',
       }

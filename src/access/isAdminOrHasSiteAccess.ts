@@ -1,7 +1,6 @@
 import { Access } from "payload/config";
 
 export const isAdminOrHasSiteAccess = (siteIDFieldName: string = 'site'): Access => ({ req: { user } }) => {
-  console.log("here", siteIDFieldName, user.sites)
     // Need to be logged in
   if (user) {
     // If user has role of 'admin'

@@ -8,7 +8,6 @@
     lastName: string;
     roles?: ('admin' | 'seller')[];
     categories?: string[] | Category[];
-    sites?: string[] | Site[];
     email?: string;
     company?: string | Company
     resetPasswordToken?: string;

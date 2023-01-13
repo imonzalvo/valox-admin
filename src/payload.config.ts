@@ -11,6 +11,7 @@ import Media from './collections/Media';
 import { Sites } from './collections/Sites';
 import Companies from './collections/Company';
 import { seed } from './seed';
+import Configurations from './collections/Configuration';
 
 const adapter = s3Adapter({
   config: {
@@ -45,7 +46,8 @@ export default buildConfig({
     Users,
     Media,
     Sites,
-    Companies
+    Companies,
+    Configurations
   ],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts')

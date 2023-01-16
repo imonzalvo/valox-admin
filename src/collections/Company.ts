@@ -1,10 +1,10 @@
-import { CollectionConfig } from 'payload/types';
-import { isAdminOrCompanyOwner } from '../access/isAdminOrCompanyOwner';
+import { CollectionConfig } from "payload/types";
+import { isAdminOrCompanyOwner } from "../access/isAdminOrCompanyOwner";
 
 const Companies: CollectionConfig = {
-  slug: 'companies',
+  slug: "companies",
   admin: {
-    useAsTitle: 'name',
+    useAsTitle: "name",
   },
   access: {
     // Admins can read all, but any other logged in user can only read themselves
@@ -16,43 +16,86 @@ const Companies: CollectionConfig = {
   },
   fields: [
     {
-      name: 'name',
-      type: 'text',
+      name: "handle",
+      type: "text",
+      unique: true,
+      validate: (val, { operation }) => {
+        if (!/[a-z0-9]/.test(val)) {
+          return "Este campo solo puede contener letras en minuscula o numeros.";
+        }
+        return true;
+      },
     },
     {
-      name: 'configurations',
-      type: 'relationship',
-      relationTo: 'configurations',
+      name: "name",
+      type: "text",
+    },
+    {
+      name: "configurations",
+      type: "relationship",
+      relationTo: "configurations",
       hidden: true,
-      defaultValue: ({ user }) => (user.company)
+      defaultValue: ({ user }) => {
+        user.id;
+      },
     },
   ],
   timestamps: false,
   endpoints: [
     {
-      path: '/:id',
-      method: 'get',
+      path: "/handle/:handle",
+      method: "get",
       handler: async (req, res, next) => {
-        console.log("params", req.params.id)
-        const company = await req.payload.findByID({
+        const companyQuery = await req.payload.find({
           collection: "companies",
-          id: req.params.id
+          where: { handle: { equals: req.params.handle } },
         });
 
-        const categoriesQuery = await req.payload.find({
-          collection: "categories",
-          where: { company: { equals: req.params.id } },
-          limit: 50
-        });
-
-        if (company) {
-          res.status(200).send({ company, categories: categoriesQuery.docs });
-        } else {
-          res.status(404).send({ error: 'not found' });
+        if (!companyQuery || !companyQuery.docs[0]) {
+          res.status(404).send({ error: "not found" });
         }
-      }
-    }
+
+        const company = companyQuery.docs[0];
+
+        const categories = await getCategories(req, res);
+        const products = await getProducts(req, res, categories);
+
+        res
+          .status(200)
+          .send({ company, categories: categories, products: products });
+      },
+    },
   ],
-}
+};
+
+const getCategories = async (req, res) => {
+  const categoriesQuery = await req.payload.find({
+    collection: "categories",
+    where: { company: { equals: req.params.id } },
+    limit: 50,
+  });
+
+  if (!categoriesQuery) {
+    res.status(404).send({ error: "not found" });
+  }
+
+  return categoriesQuery.docs;
+};
+
+const getProducts = async (req, res, categories) => {
+  const categoriesIds = categories.map((category) => category.id);
+  const productsQuery = await req.payload.find({
+    collection: "products",
+    where: {
+      category: { in: categoriesIds },
+    },
+  });
+
+  if (!productsQuery) {
+    res.status(404).send({ error: "not found" });
+  }
+
+  return productsQuery.docs;
+};
 
 export default Companies;

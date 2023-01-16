@@ -7,11 +7,13 @@ export const isAdminOrCompanyOwner: Access =
       // If user has role of 'admin'
       if (user.roles.includes("admin")) return true;
 
+      console.log("am i here??")
       return {
         id: {
           equals: user.company,
         },
       };
+      // return false;
     }
 
     // Reject everyone else

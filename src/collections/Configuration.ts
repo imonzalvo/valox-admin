@@ -26,6 +26,12 @@ const Configurations: CollectionConfig = {
     },
     { ...colorField },
     {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      required: true,
+    },
+    {
       name: 'company',
       // Save this field to JWT so we can use from `req.user`
       saveToJWT: true,

@@ -2,7 +2,6 @@ import { Access } from "payload/config";
 
 export const isAdminOrOwner: Access = async ({ req, id}) => {
   // Need to be logged in
-  // console.log(req.user)
   
   // query another collection using the id
   // const result = await req.payload.

@@ -59,10 +59,11 @@ const Companies: CollectionConfig = {
 
         const categories = await getCategories(req, res);
         const products = await getProducts(req, res, categories);
+        const configurations = await getConfigurations(req, res, company);
 
         res
           .status(200)
-          .send({ company, categories: categories, products: products });
+          .send({ company, categories: categories, products: products, configurations: configurations });
       },
     },
   ],
@@ -96,6 +97,21 @@ const getProducts = async (req, res, categories) => {
   }
 
   return productsQuery.docs;
+};
+
+const getConfigurations = async (req, res, company) => {
+  const configurations = await req.payload.find({
+    collection: "configurations",
+    where: {
+      company: { equals: company.id },
+    },
+  });
+
+  if (!configurations) {
+    res.status(404).send({ error: "not found" });
+  }
+
+  return configurations.docs[0];
 };
 
 export default Companies;

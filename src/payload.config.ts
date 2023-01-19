@@ -25,6 +25,7 @@ const adapter = s3Adapter({
 
 export default buildConfig({
   serverURL: 'http://localhost:3000',
+  cors: "*",
   plugins: [
     cloudStorage({
       collections: {

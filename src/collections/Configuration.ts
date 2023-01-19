@@ -24,7 +24,6 @@ const Configurations: CollectionConfig = {
       name: 'description',
       type: 'text',
     },
-    { ...colorField },
     {
       name: 'image',
       type: 'upload',

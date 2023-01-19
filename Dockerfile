@@ -13,6 +13,7 @@ FROM base as runtime
 
 ENV NODE_ENV=production
 ENV PAYLOAD_CONFIG_PATH=dist/payload.config.js
+ENV MONGODB_URI=mongodb+srv://nacho:valox-test@valox-admin-test.kds2u.mongodb.net/?retryWrites=true&w=majority
 
 WORKDIR /home/node/app
 COPY package*.json  ./

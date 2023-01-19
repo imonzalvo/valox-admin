@@ -57,7 +57,7 @@ const Companies: CollectionConfig = {
 
         const company = companyQuery.docs[0];
 
-        const categories = await getCategories(req, res);
+        const categories = await getCategories(req, res, company.id);
         const products = await getProducts(req, res, categories);
         const configurations = await getConfigurations(req, res, company);
 
@@ -69,10 +69,10 @@ const Companies: CollectionConfig = {
   ],
 };
 
-const getCategories = async (req, res) => {
+const getCategories = async (req, res, companyId) => {
   const categoriesQuery = await req.payload.find({
     collection: "categories",
-    where: { company: { equals: req.params.id } },
+    where: { company: { equals: companyId } },
     limit: 50,
   });
 

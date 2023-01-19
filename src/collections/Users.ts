@@ -1,18 +1,18 @@
-import { CollectionConfig } from 'payload/types';
-import { isAdmin, isAdminFieldLevel } from '../access/isAdmin';
-import { isAdminOrSelf } from '../access/isAdminOrSelf';
+import { CollectionConfig } from "payload/types";
+import { isAdmin, isAdminFieldLevel } from "../access/isAdmin";
+import { isAdminOrSelf } from "../access/isAdminOrSelf";
 
 const Users: CollectionConfig = {
-  slug: 'users',
+  slug: "users",
   auth: {
     // This property controls how deeply "populated"
     // relationship docs are that are stored in the req.user.
-    // It should be kept to as low as possible, which 
+    // It should be kept to as low as possible, which
     // keeps performance fast.
     depth: 0,
   },
   admin: {
-    useAsTitle: 'email',
+    useAsTitle: "email",
   },
   access: {
     // Only admins can create users
@@ -27,27 +27,27 @@ const Users: CollectionConfig = {
   fields: [
     // Email added by default
     {
-      type: 'row',
+      type: "row",
       fields: [
         {
-          name: 'firstName',
-          type: 'text',
+          name: "firstName",
+          type: "text",
           required: true,
         },
         {
-          name: 'lastName',
-          type: 'text',
+          name: "lastName",
+          type: "text",
           required: true,
         },
       ],
     },
     {
-      name: 'roles',
+      name: "roles",
       // Save this field to JWT so we can use from `req.user`
       saveToJWT: true,
-      type: 'select',
+      type: "select",
       hasMany: true,
-      defaultValue: ['seller'],
+      defaultValue: ["seller"],
       access: {
         // Only admins can create or update a value for this field
         create: isAdminFieldLevel,
@@ -55,21 +55,21 @@ const Users: CollectionConfig = {
       },
       options: [
         {
-          label: 'Admin',
-          value: 'admin',
+          label: "Admin",
+          value: "admin",
         },
         {
-          label: 'Seller',
-          value: 'seller',
+          label: "Seller",
+          value: "seller",
         },
-      ]
+      ],
     },
     {
-      name: 'sites',
+      name: "sites",
       // Save this field to JWT so we can use from `req.user`
       saveToJWT: true,
-      type: 'relationship',
-      relationTo: 'sites',
+      type: "relationship",
+      relationTo: "sites",
       hasMany: true,
       access: {
         // Only admins can create or update a value for this field
@@ -77,18 +77,28 @@ const Users: CollectionConfig = {
         update: isAdminFieldLevel,
       },
       admin: {
-        condition: ({ roles }) => roles && roles.includes('admin'),
-        description: 'This field sets which sites that this user has access to.'
-      }
+        condition: ({ roles }) => roles && roles.includes("admin"),
+        description:
+          "This field sets which sites that this user has access to.",
+      },
     },
     {
-      name: 'company',
+      name: "company",
       // Save this field to JWT so we can use from `req.user`
       saveToJWT: true,
-      type: 'relationship',
-      relationTo: 'companies',
-      maxDepth: 1
-    }
+      type: "relationship",
+      relationTo: "companies",
+      maxDepth: 1,
+    },
+  ],
+  endpoints: [
+    {
+      path: "/ping",
+      method: "get",
+      handler: async (req, res, next) => {
+        res.send(200);
+      },
+    },
   ],
 };
 

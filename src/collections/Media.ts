@@ -9,6 +9,13 @@ const Media: CollectionConfig = {
   upload: {
     staticURL: '/media',
     staticDir: 'media',
+    disableLocalStorage: true,
+    formatOptions: {
+      format: "webp",
+      options: {
+        losselesss: true
+      }
+    },
     imageSizes: [
       {
         name: 'thumbnail',
@@ -25,10 +32,6 @@ const Media: CollectionConfig = {
       {
         name: 'tablet',
         width: 1024,
-        // By specifying `null` or leaving a height undefined,
-        // the image will be sized to a certain width,
-        // but it will retain its original aspect ratio
-        // and calculate a height automatically.
         height: null,
         position: 'centre',
       },

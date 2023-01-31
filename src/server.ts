@@ -1,9 +1,9 @@
-import axios from "axios";
 import express from "express";
 import payload from "payload";
-var cors = require("cors");
+import createPaymentEntrypoint from './api/entrypoints/createPayment';
 
 require("dotenv").config();
+
 const app = express();
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
@@ -47,31 +47,6 @@ payload.init({
 });
 
 // Add your own express routes here
-app.post("/process_payment", (req, res) => {
-  console.log("req", req.body);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${process.env.CELIA_ACCESS_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-  };
-  const mercadoPagoRequest = {
-    description: "Pago de prueba nacho",
-    installments: 1,
-    payer: req.body.payer,
-    token: req.body.token,
-    payment_method_id: req.body.paymentMethodId,
-    transaction_amount: req.body.transactionAmount,
-  };
-  axios
-    .post("https://api.mercadopago.com/v1/payments", mercadoPagoRequest, config)
-    .then((mercadoPagoResponse) => {
-      console.log("res", mercadoPagoResponse);
-      res.send({
-        paymentId: mercadoPagoResponse.data.id,
-      });
-    })
-    .catch((err) => console.log("Erro", err));
-});
+app.post("/process_payment/:companyHandle", createPaymentEntrypoint);
 
 app.listen(3000);

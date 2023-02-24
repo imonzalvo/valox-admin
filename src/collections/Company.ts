@@ -34,10 +34,6 @@ const Companies: CollectionConfig = {
       name: "configurations",
       type: "relationship",
       relationTo: "configurations",
-      hidden: true,
-      defaultValue: ({ user }) => {
-        user.id;
-      },
     },
   ],
   timestamps: false,

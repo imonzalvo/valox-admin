@@ -1,7 +1,6 @@
 import { CollectionConfig } from "payload/types";
 import { isAdmin } from "../access/isAdmin";
 import { isAdminOrOrderOwner } from "../access/isAdminOrOrderOwner";
-import { CustomCell } from "../components/cells/OrderDescriptionCell";
 const Orders: CollectionConfig = {
   slug: "orders",
   admin: {

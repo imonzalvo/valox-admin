@@ -24,5 +24,10 @@
   ],
   "ts-node": {
     "transpileOnly": true
+  },
+  "paths": {
+    "payload/generated-types": [
+      "./src/payload-types.ts",
+    ],
   }
 }

@@ -1,6 +1,8 @@
 import express from "express";
 import payload from "payload";
 import createPaymentEntrypoint from './api/entrypoints/createPayment';
+import createOrderEntrypoint from './api/entrypoints/createOrder';
+import createRoutes from './router';
 
 require("dotenv").config();
 
@@ -46,7 +48,5 @@ payload.init({
   },
 });
 
-// Add your own express routes here
-app.post("/process_payment/:companyHandle", createPaymentEntrypoint);
-
+createRoutes(app);
 app.listen(3000);

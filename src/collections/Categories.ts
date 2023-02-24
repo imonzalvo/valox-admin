@@ -28,6 +28,13 @@ const Categories: CollectionConfig = {
       hidden: true,
       defaultValue: ({ user }) => user.company,
     },
+    {
+      name: "products",
+      type: "relationship",
+      relationTo: "products",
+      hasMany: true,
+      hidden: true,
+    },
   ],
   endpoints: [
     {

@@ -16,37 +16,76 @@ const Products: CollectionConfig = {
     delete: isAdminOrProductOwner,
   },
   fields: [
+    // Product Info
     {
       name: 'title',
       type: 'text',
+      label: {
+        en: "Title",
+        es: "Titulo",
+      },
     },
     {
       name: 'price',
       type: 'number',
+      label: {
+        en: "Price",
+        es: "Precio",
+      },
+      
     },
+    {
+      name: 'description',
+      type: 'text',
+      required: true,
+      label: {
+        en: "Description",
+        es: "Descripción",
+      },
+    },
+    // Relationships
     {
       name: 'creator',
       type: 'relationship',
-      relationTo: 'users',
+      relationTo: 'companies',
       hidden: true,
       defaultValue: ({ user }) => (user.company)
     },
     {
       name: 'category',
       type: 'relationship',
-      relationTo: 'categories'
+      relationTo: 'categories',
+      label: {
+        en: "Category",
+        es: "Categoría",
+      },
     },
     {
       name: 'tags',
       type: 'relationship',
       relationTo: 'tags',
       hasMany: true,
+      label: {
+        en: "Tags",
+        es: "Tags",
+      },
     },
     {
-      name: 'image',
-      type: 'upload',
-      relationTo: 'media',
-      required: true,
+      name: "images",
+      type: "array",
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          maxDepth: 3,
+          required: true,
+        },
+      ],
+      label: {
+        en: "Images",
+        es: "Imagenes",
+      },
     },
     {
       name: 'status',
@@ -64,7 +103,11 @@ const Products: CollectionConfig = {
       defaultValue: 'published',
       admin: {
         position: 'sidebar',
-      }
+      },
+      label: {
+        en: "Status",
+        es: "Status",
+      },
     }
   ],
 }

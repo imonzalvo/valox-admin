@@ -12,6 +12,10 @@ import { Sites } from './collections/Sites';
 import Companies from './collections/Company';
 import { seed } from './seed';
 import Configurations from './collections/Configuration';
+import Orders from './collections/Orders';
+import ShippingOptions from './collections/ShippingOptions';
+import PaymentMethods from './collections/PaymentMethods';
+import OrderProducts from './collections/OrderProducts';
 
 const adapter = s3Adapter({
   config: {
@@ -48,7 +52,11 @@ export default buildConfig({
     Media,
     Sites,
     Companies,
-    Configurations
+    Configurations,
+    Orders,
+    ShippingOptions,
+    PaymentMethods,
+    OrderProducts
   ],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts')

@@ -1,42 +1,40 @@
-import { CollectionConfig } from 'payload/types';
+import { CollectionConfig } from "payload/types";
 
 const Media: CollectionConfig = {
-  slug: 'media',
+  slug: "media",
   access: {
     read: () => true,
   },
   fields: [],
   upload: {
-    staticURL: '/media',
-    staticDir: 'media',
+    staticURL: "/media",
+    staticDir: "media",
     disableLocalStorage: true,
     formatOptions: {
       format: "webp",
-      options: {
-        losselesss: true
-      }
+      options: { quality: 60 },
     },
     imageSizes: [
       {
-        name: 'thumbnail',
+        name: "thumbnail",
         width: 400,
         height: 300,
-        position: 'centre',
+        position: "centre",
       },
       {
-        name: 'card',
+        name: "card",
         width: 768,
         height: 1024,
-        position: 'centre',
+        position: "centre",
       },
       {
-        name: 'tablet',
+        name: "tablet",
         width: 1024,
         height: null,
-        position: 'centre',
+        position: "centre",
       },
     ],
-    adminThumbnail: 'thumbnail',
+    adminThumbnail: "thumbnail",
   },
 };
 

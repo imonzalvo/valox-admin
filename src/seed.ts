@@ -5,7 +5,7 @@ export const seed = async (payload: Payload): Promise<void> => {
 
   // Local API methods skip all access control by default
   // so we can easily create an admin user directly in init
-  await payload.create<User>({
+  await payload.create({
     collection: 'users',
     data: {
       email: 'admin@example.com',
@@ -16,7 +16,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     }
   })
 
-  await payload.create<User>({
+  await payload.create({
     collection: 'users',
     data: {
       email: 'seller1@example.com',

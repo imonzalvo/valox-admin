@@ -68,7 +68,7 @@ export default async (req: Request, res: Response) => {
 
   const newOrder = buildOrderFromDto(orderDto);
   newOrder["company"] = company.id;
-  const createdOrder = await payload.create<Order>({
+  const createdOrder = await payload.create({
     collection: "orders",
     data: newOrder,
   });
@@ -155,7 +155,7 @@ const createOrderProducts = async (
         product: product.id,
       };
 
-      const orderProduct = await payload.create<OrderProduct>({
+      const orderProduct = await payload.create({
         collection: "orderProducts",
         data: orderProductData,
       });

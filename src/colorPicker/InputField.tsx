@@ -103,7 +103,7 @@ const InputField: React.FC<Props> = (props) => {
             iconPosition="left"
             size="small"
             onClick={handleAddColor}
-            disabled={validateHexColor(colorToAdd) !== true}
+            disabled={validateHexColor(colorToAdd, null) !== true}
           >
             Add
           </Button>

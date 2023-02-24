@@ -25,7 +25,7 @@ const Categories: CollectionConfig = {
       saveToJWT: true,
       type: "relationship",
       relationTo: "companies",
-      hidden: true,
+      // hidden: true,
       defaultValue: ({ user }) => user.company,
     },
     {

@@ -22,20 +22,7 @@ const getCompanyConfigurationByHandle = async (handle: string) => {
   try {
     const company = await getCompanyByHandle(handle);
 
-    const companyConfigutarion = await payload
-      .find({
-        collection: "configurations",
-        where: { company: { equals: company.id } },
-      })
-      .then((res) => {
-        if (res.totalDocs == 0) {
-          throw new NotFoundError("Company Configuration not found");
-        }
-
-        return res.docs[0];
-      });
-
-    return companyConfigutarion;
+    return company.configurations;
   } catch (e) {
     throw e;
   }

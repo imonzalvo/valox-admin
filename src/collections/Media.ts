@@ -12,7 +12,7 @@ const Media: CollectionConfig = {
     disableLocalStorage: true,
     formatOptions: {
       format: "webp",
-      options: { quality: 60 },
+      options: { quality: 60, alphaQuality: 50},
     },
     imageSizes: [
       {
@@ -20,18 +20,30 @@ const Media: CollectionConfig = {
         width: 400,
         height: 300,
         position: "centre",
+        formatOptions: {
+          format: "webp",
+          options: { quality: 15, alphaQuality: 20},
+        }
       },
       {
         name: "card",
         width: 768,
         height: 1024,
         position: "centre",
+        formatOptions: {
+          format: "webp",
+          options: { quality: 15, alphaQuality: 20},
+        }
       },
       {
         name: "tablet",
         width: 1024,
-        height: null,
+        height: undefined,
         position: "centre",
+        formatOptions: {
+          format: "webp",
+          options: { quality: 15, alphaQuality: 20},
+        }
       },
     ],
     adminThumbnail: "thumbnail",

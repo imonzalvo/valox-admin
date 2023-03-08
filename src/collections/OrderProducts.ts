@@ -4,7 +4,7 @@ import { isAdmin } from "../access/isAdmin";
 const OrderProducts: CollectionConfig = {
   slug: "orderProducts",
   admin: {
-    useAsTitle: "id",
+    useAsTitle: "product",
   },
   access: {
     read: () => true,

@@ -11,16 +11,13 @@ const Orders: CollectionConfig = {
       "paymentMethod",
       "clientName",
     ],
-    useAsTitle: "Ordenes",
+    useAsTitle: "createdAt",
     disableDuplicate: true,
   },
   access: {
     create: isAdmin,
-    // Admins can read all, but any other logged in user can only read themselves
     read: isAdminOrOrderOwner,
-    // Admins can update all, but any other logged in user can only update themselves
     update: isAdmin,
-    // Only admins can delete
     delete: isAdmin,
   },
   fields: [

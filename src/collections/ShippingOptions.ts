@@ -28,15 +28,7 @@ const ShippingOptions: CollectionConfig = {
         en: "Description",
         es: "Descripción",
       },
-    },
-    {
-      name: "price",
-      type: "number",
-      label: {
-        en: "Price",
-        es: "Precio",
-      },
-    },
+    }
   ],
   timestamps: false,
 };

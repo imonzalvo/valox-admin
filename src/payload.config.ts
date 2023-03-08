@@ -11,11 +11,11 @@ import Media from "./collections/Media";
 import { Sites } from "./collections/Sites";
 import Companies from "./collections/Company";
 import { seed } from "./seed";
-import Configurations from "./collections/Configuration";
 import Orders from "./collections/Orders";
 import ShippingOptions from "./collections/ShippingOptions";
 import PaymentMethods from "./collections/PaymentMethods";
 import OrderProducts from "./collections/OrderProducts";
+import Configurations from "./collections/Configurations";
 
 const adapter = s3Adapter({
   config: {

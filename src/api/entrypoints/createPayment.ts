@@ -15,9 +15,10 @@ export default (req, res) => {
         "Content-Type": "application/json",
       },
     };
+    console.log("req.body", req.body)
     const mercadoPagoRequest = {
       description: `Compra ${companyHandle.toLocaleUpperCase()}`,
-      installments: 1,
+      installments: req.body.installments,
       payer: req.body.payer,
       token: req.body.token,
       payment_method_id: req.body.paymentMethodId,

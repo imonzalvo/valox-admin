@@ -1,6 +1,8 @@
 import { CollectionConfig } from "payload/types";
 import { isAdmin } from "../access/isAdmin";
 import { isAdminOrOrderOwner } from "../access/isAdminOrOrderOwner";
+
+
 const Orders: CollectionConfig = {
   slug: "orders",
   admin: {
@@ -89,14 +91,23 @@ const Orders: CollectionConfig = {
     },
     {
       name: "products",
-      type: "relationship",
-      relationTo: "orderProducts",
-      hasMany: true,
-      maxDepth: 3,
-      label: {
-        en: "Products",
-        es: "Productos",
-      },
+      type: "array",
+      fields: [
+        {
+          name: "title",
+          type: "text"
+        },
+        {
+          name: "quantity",
+          type: "number",
+          defaultValue: 1,
+        },
+        {
+          name: "unitPrice",
+          type: "number",
+          required: true,
+        },
+      ]
     },
     // Client info
     {
@@ -151,6 +162,10 @@ const Orders: CollectionConfig = {
             typeof value === "string" ? 20 - value.length : "20"
           } characters left`,
       },
+      label: {
+        en: "Notes",
+        es: "Comentarios",
+      },
     },
     {
       type: "row",
@@ -178,14 +193,6 @@ const Orders: CollectionConfig = {
           },
         },
       ],
-    },
-    {
-      name: "notes",
-      type: "text",
-      label: {
-        en: "Notes",
-        es: "Comentarios",
-      },
     },
     // Order status
     {

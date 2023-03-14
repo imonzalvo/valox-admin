@@ -1,11 +1,11 @@
-import { CollectionConfig } from 'payload/types';
-import { isAdminOrProductOwner } from '../access/isAdminOrProductOwner';
+import { CollectionConfig } from "payload/types";
+import { isAdminOrProductOwner } from "../access/isAdminOrProductOwner";
 
 const Products: CollectionConfig = {
-  slug: 'products',
+  slug: "products",
   admin: {
-    defaultColumns: ['title', 'price'],
-    useAsTitle: 'Productos',
+    defaultColumns: ["title", "price"],
+    useAsTitle: "Productos",
   },
   access: {
     // Admins can read all, but any other logged in user can only read themselves
@@ -18,25 +18,24 @@ const Products: CollectionConfig = {
   fields: [
     // Product Info
     {
-      name: 'title',
-      type: 'text',
+      name: "title",
+      type: "text",
       label: {
         en: "Title",
         es: "Titulo",
       },
     },
     {
-      name: 'price',
-      type: 'number',
+      name: "price",
+      type: "number",
       label: {
         en: "Price",
         es: "Precio",
       },
-      
     },
     {
-      name: 'description',
-      type: 'text',
+      name: "description",
+      type: "text",
       required: true,
       label: {
         en: "Description",
@@ -45,29 +44,19 @@ const Products: CollectionConfig = {
     },
     // Relationships
     {
-      name: 'creator',
-      type: 'relationship',
-      relationTo: 'companies',
+      name: "creator",
+      type: "relationship",
+      relationTo: "companies",
       hidden: true,
-      defaultValue: ({ user }) => (user.company)
+      defaultValue: ({ user }) => user.company,
     },
     {
-      name: 'category',
-      type: 'relationship',
-      relationTo: 'categories',
+      name: "category",
+      type: "relationship",
+      relationTo: "categories",
       label: {
         en: "Category",
         es: "Categoría",
-      },
-    },
-    {
-      name: 'tags',
-      type: 'relationship',
-      relationTo: 'tags',
-      hasMany: true,
-      label: {
-        en: "Tags",
-        es: "Tags",
       },
     },
     {
@@ -75,9 +64,9 @@ const Products: CollectionConfig = {
       type: "array",
       fields: [
         {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
+          name: "image",
+          type: "upload",
+          relationTo: "media",
           maxDepth: 3,
           required: true,
         },
@@ -88,28 +77,28 @@ const Products: CollectionConfig = {
       },
     },
     {
-      name: 'status',
-      type: 'select',
+      name: "status",
+      type: "select",
       options: [
         {
-          value: 'draft',
-          label: 'Draft',
+          value: "draft",
+          label: "Draft",
         },
         {
-          value: 'published',
-          label: 'Published',
+          value: "published",
+          label: "Published",
         },
       ],
-      defaultValue: 'published',
+      defaultValue: "published",
       admin: {
-        position: 'sidebar',
+        position: "sidebar",
       },
       label: {
         en: "Status",
         es: "Status",
       },
-    }
+    },
   ],
-}
+};
 
 export default Products;

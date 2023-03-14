@@ -12,7 +12,6 @@ export default (app: Express) => {
   );
   app.post("/checkout/:companyHandle", getCheckoutInfo);
   app.use((err, req, res, next) => {
-    console.log("err", err)
     res.status(err.status || 500).send(err);
   });
 };

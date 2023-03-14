@@ -16,4 +16,24 @@ const getProductsByIds = async (ids: string[], depth?: number) => {
   return products;
 };
 
-export { getProductsByIds };
+const validateProducts = async (products: any, companyId: string) => {
+  const companyCategoriesIds = await payload
+    .find({
+      collection: "categories",
+      where: { company: { equals: companyId } },
+      limit: 50,
+    })
+    .then((res) => res.docs.map((category) => category.id))
+    .catch(() => []);
+
+  const productsNotInCompanyCategories = products.filter(
+    (product: any) => !companyCategoriesIds.includes(product.id)
+  );
+
+  const existsAtLeastOneInvalidProduct =
+    productsNotInCompanyCategories.length > 0;
+
+  return existsAtLeastOneInvalidProduct;
+};
+
+export { getProductsByIds, validateProducts };

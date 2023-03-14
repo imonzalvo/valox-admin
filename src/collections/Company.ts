@@ -4,7 +4,7 @@ import { isAdminOrCompanyOwner } from "../access/isAdminOrCompanyOwner";
 const Companies: CollectionConfig = {
   slug: "companies",
   admin: {
-    useAsTitle: "name",
+    useAsTitle: "handle",
   },
   access: {
     // Admins can read all, but any other logged in user can only read themselves
@@ -55,11 +55,10 @@ const Companies: CollectionConfig = {
 
         const categories = await getCategories(req, res, company.id);
         const products = await getProducts(req, res, categories);
-        const configurations = await getConfigurations(req, res, company);
 
         res
           .status(200)
-          .send({ company, categories: categories, products: products, configurations: configurations });
+          .send({ company, categories: categories, products: products });
       },
     },
   ],
@@ -93,21 +92,6 @@ const getProducts = async (req, res, categories) => {
   }
 
   return productsQuery.docs;
-};
-
-const getConfigurations = async (req, res, company) => {
-  const configurations = await req.payload.find({
-    collection: "configurations",
-    where: {
-      company: { equals: company.id },
-    },
-  });
-
-  if (!configurations) {
-    res.status(404).send({ error: "not found" });
-  }
-
-  return configurations.docs[0];
 };
 
 export default Companies;

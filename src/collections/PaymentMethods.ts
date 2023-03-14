@@ -18,15 +18,6 @@ export const ShippingOptionsFields: CollectionConfig["fields"] = [
       es: "Descripción",
     },
   },
-  {
-    name: "price",
-    type: "number",
-    defaultValue: 0,
-    label: {
-      en: "Price",
-      es: "Precio",
-    },
-  },
 ];
 
 const PaymentMethods: CollectionConfig = {

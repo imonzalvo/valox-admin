@@ -1,134 +1,129 @@
 import payload from "payload";
 import { Request, Response } from "express";
-import { Order, OrderProduct } from "../../payload-types";
 import OrderDto from "../dtos/orderDto";
+import { getCompanyConfigurationByHandle } from "../services/companiesService";
+import {
+  getProductsByIds,
+  validateProducts,
+} from "../services/productsService";
+import {
+  getPaymentMethod,
+  getShippingOption,
+} from "../services/configurationsService";
+import ValidationError from "../errors/validationError";
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response, next) => {
   const { companyHandle } = req.params;
 
   const orderDto = req.body;
 
-  console.log("enter", orderDto);
-  // Validations
-  const company = await payload
-    .find({
-      collection: "companies",
-      where: { handle: { equals: companyHandle } },
-    })
-    .then((res) => {
-      return res.docs[0];
-    });
+  try {
+    // Validations
 
-  if (!company) {
-    res.sendStatus(404);
-    return;
-  }
+    // Validate Company
+    const company = await payload
+      .find({
+        collection: "companies",
+        where: { handle: { equals: companyHandle } },
+      })
+      .then((res) => {
+        return res.docs[0];
+      });
 
-  const shippingOption = await getShippingOption(orderDto.shippingOption);
-  if (!shippingOption) {
-    res.sendStatus(404);
-    return;
-  }
+    if (!company) {
+      res.sendStatus(404);
+      return;
+    }
 
-  console.log("shjipping option", shippingOption);
+    const configutarions = await getCompanyConfigurationByHandle(companyHandle);
 
-  const isValidPaymentMethod = await paymentMethodExists(
-    orderDto.paymentMethod
-  );
-  if (!isValidPaymentMethod) {
-    res.sendStatus(404);
-    return;
-  }
+    const shippingOption = await getShippingOption(
+      orderDto.shippingOption,
+      configutarions
+    );
 
-  console.log("order products", orderDto.products);
-  // Validate Products
-  const productIds = orderDto.products.map(
-    (orderProduct: any) => orderProduct.id
-  );
+    const paymentMethod = await getPaymentMethod(
+      orderDto.paymentMethod,
+      configutarions
+    );
 
-  const products = await payload
-    .find({
-      collection: "products",
-      where: {
-        id: { in: productIds },
-      },
-    })
-    .then((res) => res.docs);
+    // Validate Products
+    const productIds = orderDto.products.map(
+      (orderProduct: any) => orderProduct.id
+    );
+    const products = await getProductsByIds(productIds);
 
-  console.log("prodcuts", products);
+    const areProductsValid = await validateProducts(products, company.id);
 
-  const areProductsValid = await validateProducts(products, company.id);
+    if (!areProductsValid) {
+      throw new ValidationError("One or more products are invalid");
+    }
 
-  if (!areProductsValid) {
-    res.sendStatus(400);
-    return;
-  }
+    // Build OrderProducts
+    const orderProducts = buildOrderProducts(products, orderDto.products);
 
-  // Create order
+    // Calculated values
+    const productsAmount = calculateProductsAmount(orderProducts);
+    const shippingCost = shippingOption.cost;
+    const paymentMethodCost = paymentMethod.cost;
+    const totalAmount = productsAmount + shippingCost + paymentMethodCost;
 
-  const newOrder = buildOrderFromDto(orderDto);
-  newOrder["company"] = company.id;
-  const createdOrder = await payload.create({
-    collection: "orders",
-    data: newOrder,
-  });
+    // Create order
+    const clientInfo = buildClientInfoFromDto(orderDto);
 
-  console.log("orderDto", createdOrder);
-
-  // Create OrderProducts
-  const orderProducts = await createOrderProducts(
-    products,
-    orderDto.products,
-    createdOrder.id
-  );
-
-  console.log("created products", orderProducts);
-
-  // Calculated values
-  const productsAmount = calculateProductsAmount(orderProducts);
-  const shippingCost = shippingOption.price;
-  const totalAmount = productsAmount + shippingCost;
-  const orderProductsIds = orderProducts.map(
-    (orderProduct: any) => orderProduct.id
-  );
-
-  // Update created order
-  const updatedOrder = await payload.update({
-    collection: "orders",
-    id: createdOrder.id,
-    data: {
+    const orderDetails = {
+      paymentMethod: paymentMethod.paymentMethod.name,
+      shippingOption: shippingOption.shippingOption.name,
       productsAmount: productsAmount,
       shippingCost: shippingCost,
+      paymentMethodCost: paymentMethodCost,
       totalAmount: totalAmount,
-      products: orderProductsIds,
-    },
-  });
+      notes: orderDto.notes,
+    };
 
-  console.log("updated order", updatedOrder);
+    const orderData = {
+      company: company.id,
+      shippingOption: shippingOption.shippingOption.id,
+      paymentMethod: paymentMethod.paymentMethod.id,
+      clientInfo: clientInfo,
+      products: orderProducts,
+      details: orderDetails,
+      clientName: getClientName(orderDto),
+    };
 
-  res.send(updatedOrder);
+    const createdOrder = await payload.create({
+      collection: "orders",
+      data: orderData,
+    });
+
+    res.send(createdOrder);
+  } catch (e) {
+    return next(e);
+  }
 };
 
-const buildOrderFromDto = (orderDto: OrderDto) => {
-  const whitelist = [
+const buildClientInfoFromDto = (orderDto: OrderDto) => {
+  const clientWhitelist = [
     "clientName",
+    "clientLastName",
     "clientEmail",
     "clientPhone",
     "address",
     "city",
     "postalCode",
-    "shippingOption",
-    "paymentMethod",
   ];
 
   const keys = Object.keys(orderDto);
-  const filteredKeys = keys.filter((key) => whitelist.includes(key));
+  const clientInfoKeys = keys.filter((key) => clientWhitelist.includes(key));
 
-  const filteredObj = filteredKeys.reduce((result, key) => {
+  return clientInfoKeys.reduce((result, key) => {
     result[key] = orderDto[key];
     return result;
   }, {});
-  return filteredObj;
+};
+
+const getClientName = (orderDto: any) => {
+  return orderDto.clientName;
 };
 
 const calculateProductsAmount = (orderProducts: any) => {
@@ -137,72 +132,17 @@ const calculateProductsAmount = (orderProducts: any) => {
   }, 0);
 };
 
-const createOrderProducts = async (
-  products: any,
-  productsDtos: any,
-  orderId: string
-) => {
-  const createdOrderProducts = await await Promise.all(
-    products.map(async (product: any) => {
-      const productDto = productsDtos.filter(
-        (productDto) => productDto.id == product.id
-      )[0];
+const buildOrderProducts = (products: any, productsDtos: any) => {
+  return products.map((product: any) => {
+    const productDto = productsDtos.filter(
+      (productDto: any) => productDto.id == product.id
+    )[0];
 
-      const orderProductData = {
-        unitPrice: product.price,
-        quantity: productDto.quantity,
-        order: orderId,
-        product: product.id,
-      };
-
-      const orderProduct = await payload.create({
-        collection: "orderProducts",
-        data: orderProductData,
-      });
-
-      return orderProduct;
-    })
-  );
-
-  return createdOrderProducts;
-};
-
-const validateProducts = async (orderProducts: any, companyId: string) => {
-  const companyCategoriesIds = await payload
-    .find({
-      collection: "categories",
-      where: { company: { equals: companyId } },
-      limit: 50,
-    })
-    .then((res) => res.docs.map((category) => category.id))
-    .catch(() => []);
-
-  const productsNotInCompanyCategories = orderProducts.filter(
-    (product: any) => !companyCategoriesIds.includes(product.id)
-  );
-
-  const existsAtLeastOneInvalidProduct =
-    productsNotInCompanyCategories.length > 0;
-
-  return existsAtLeastOneInvalidProduct;
-};
-
-const getShippingOption = async (shippingOptionId: string) => {
-  return await payload
-    .findByID({
-      collection: "shippingOptions",
-      id: shippingOptionId,
-    })
-    .then((res) => res)
-    .catch(() => null);
-};
-
-const paymentMethodExists = async (paymentMethodId: string) => {
-  return await payload
-    .findByID({
-      collection: "paymentMethods",
-      id: paymentMethodId,
-    })
-    .then(() => true)
-    .catch(() => false);
+    return {
+      unitPrice: product.price,
+      quantity: productDto.quantity,
+      title: product.title,
+      productId: product.id,
+    };
+  });
 };

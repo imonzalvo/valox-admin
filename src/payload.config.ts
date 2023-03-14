@@ -5,16 +5,14 @@ import { s3Adapter } from "@payloadcms/plugin-cloud-storage/s3";
 
 import Categories from "./collections/Categories";
 import Products from "./collections/Products";
-import Tags from "./collections/Tags";
 import Users from "./collections/Users";
 import Media from "./collections/Media";
 import { Sites } from "./collections/Sites";
 import Companies from "./collections/Company";
 import { seed } from "./seed";
-import Orders from "./collections/Orders";
+import Orders from "./collections/Orders/index";
 import ShippingOptions from "./collections/ShippingOptions";
 import PaymentMethods from "./collections/PaymentMethods";
-import OrderProducts from "./collections/OrderProducts";
 import Configurations from "./collections/Configurations";
 
 const adapter = s3Adapter({
@@ -47,7 +45,6 @@ export default buildConfig({
   collections: [
     Categories,
     Products,
-    Tags,
     Users,
     Media,
     Sites,
@@ -56,7 +53,6 @@ export default buildConfig({
     Orders,
     ShippingOptions,
     PaymentMethods,
-    OrderProducts,
   ],
   typescript: {
     outputFile: path.resolve(__dirname, "payload-types.ts"),

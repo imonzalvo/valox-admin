@@ -1,4 +1,5 @@
 import { CollectionConfig } from "payload/types";
+import { isAdmin } from "../../access/isAdmin";
 import { isAdminOrConfigurationsOwner } from "../../access/isAdminOrConfigurationsOwner";
 import { PaymentMethodsField } from "./fields/PaymentMethodsField";
 import { ShippingOptionsField } from "./fields/ShippingOptionsField";
@@ -35,7 +36,6 @@ export const ConfigurationFields: CollectionConfig["fields"] = [
     saveToJWT: true,
     type: "relationship",
     relationTo: "companies",
-    hidden: true,
     defaultValue: ({ user }) => user.company,
   },
   {
@@ -64,6 +64,7 @@ const Configurations: CollectionConfig = {
     read: isAdminOrConfigurationsOwner,
     update: isAdminOrConfigurationsOwner,
     delete: isAdminOrConfigurationsOwner,
+    create: isAdmin
   },
   fields: ConfigurationFields,
   timestamps: false,

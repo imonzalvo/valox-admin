@@ -1,4 +1,5 @@
 import { CollectionConfig } from "payload/types";
+import { renameMedia } from "./hooks/renameMedia";
 
 const Media: CollectionConfig = {
   slug: "media",
@@ -6,6 +7,9 @@ const Media: CollectionConfig = {
     read: () => true,
   },
   fields: [],
+  hooks: {
+    beforeChange: [renameMedia]
+  },
   upload: {
     staticURL: "/media",
     staticDir: "media",

@@ -1,7 +1,7 @@
 import { CollectionConfig } from "payload/types";
 import { isAdmin } from "../access/isAdmin";
 
-export const ShippingOptionsFields: CollectionConfig["fields"] = [
+export const PaymentMethodFields: CollectionConfig["fields"] = [
   {
     name: "name",
     type: "text",
@@ -18,6 +18,15 @@ export const ShippingOptionsFields: CollectionConfig["fields"] = [
       es: "Descripción",
     },
   },
+  {
+    name: "mercadopago",
+    type: "checkbox",
+    defaultValue: false,
+    label: {
+      en: "MercadoPago",
+      es: "MercadoPago",
+    },
+  },
 ];
 
 const PaymentMethods: CollectionConfig = {
@@ -31,7 +40,7 @@ const PaymentMethods: CollectionConfig = {
     create: isAdmin,
     delete: isAdmin,
   },
-  fields: ShippingOptionsFields,
+  fields: PaymentMethodFields,
   timestamps: false,
 };
 

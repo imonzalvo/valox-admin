@@ -3,6 +3,7 @@ import { isAdmin } from "../../access/isAdmin";
 import { isAdminOrOrderOwner } from "../../access/isAdminOrOrderOwner";
 import { ClientInfoField } from "./ClientInfoField";
 import { OrderDetails } from "./OrderDetailsField";
+import { PaymentField } from "./PaymentField";
 import { ProductsField } from "./ProductsField";
 import { StatusField } from "./StatusField";
 
@@ -10,6 +11,7 @@ export const OrderFields: CollectionConfig["fields"] = [
   OrderDetails,
   ProductsField,
   ClientInfoField,
+  PaymentField,
   {
     name: "clientName",
     type: "text",
@@ -49,7 +51,7 @@ const Orders: CollectionConfig = {
   access: {
     create: isAdmin,
     read: isAdminOrOrderOwner,
-    update: isAdmin,
+    update: isAdminOrOrderOwner,
     delete: isAdmin,
   },
   fields: OrderFields,

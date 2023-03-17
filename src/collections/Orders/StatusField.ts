@@ -17,6 +17,10 @@ export const StatusField: Field = {
       label: "Paga",
     },
     {
+      value: "payment_error",
+      label: "Error en pago",
+    },
+    {
       value: "shipped",
       label: "Enviada",
     },

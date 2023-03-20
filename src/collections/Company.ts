@@ -1,5 +1,6 @@
 import { CollectionConfig } from "payload/types";
 import { isAdminOrCompanyOwner } from "../access/isAdminOrCompanyOwner";
+import { getCategoriesTrees } from "../api/services/categories";
 
 const Companies: CollectionConfig = {
   slug: "companies",
@@ -56,9 +57,10 @@ const Companies: CollectionConfig = {
         const categories = await getCategories(req, res, company.id);
         const products = await getProducts(req, res, categories);
 
+        const categoriesTrees = await getCategoriesTrees(company.id);
         res
           .status(200)
-          .send({ company, categories: categories, products: products });
+          .send({ company, categories: categories, products: products, categoriesTrees });
       },
     },
   ],

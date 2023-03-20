@@ -14,6 +14,7 @@ import Orders from "./collections/Orders/index";
 import ShippingOptions from "./collections/ShippingOptions";
 import PaymentMethods from "./collections/PaymentMethods";
 import Configurations from "./collections/Configurations";
+import nestedDocs from "@payloadcms/plugin-nested-docs";
 
 const adapter = s3Adapter({
   config: {
@@ -37,6 +38,9 @@ export default buildConfig({
           prefix: "media/images",
         },
       },
+    }),
+    nestedDocs({
+      collections: ["categories"],
     }),
   ],
   admin: {

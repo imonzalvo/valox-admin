@@ -39,9 +39,9 @@ export const ProductsField: Field = {
       },
     },
     {
-      name: "productId",
-      type: "text",
-      label: "ID",
-    },
+      name: "product",
+      type: "relationship",
+      relationTo: "products",
+    }
   ],
 };

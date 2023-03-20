@@ -142,7 +142,7 @@ const buildOrderProducts = (products: any, productsDtos: any) => {
       unitPrice: product.price,
       quantity: productDto.quantity,
       title: product.title,
-      productId: product.id,
+      product: product.id,
     };
   });
 };

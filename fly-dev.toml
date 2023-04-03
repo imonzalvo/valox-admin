@@ -1,6 +1,6 @@
-# fly.toml file generated for mitienda-prod on 2023-04-03T19:36:38-03:00
+# fly.toml file generated for valox-admin-test on 2023-03-20T01:24:50-03:00
 
-app = "mitienda-prod"
+app = "valox-admin-test"
 kill_signal = "SIGINT"
 kill_timeout = 5
 primary_region = "scl"

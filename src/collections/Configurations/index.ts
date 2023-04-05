@@ -3,6 +3,7 @@ import { isAdmin } from "../../access/isAdmin";
 import { isAdminOrConfigurationsOwner } from "../../access/isAdminOrConfigurationsOwner";
 import { PaymentMethodsField } from "./fields/PaymentMethodsField";
 import { ShippingOptionsField } from "./fields/ShippingOptionsField";
+import { setConfigurationsOnCompany } from "./hooks/setConfigurationsOnCompany";
 
 export const ConfigurationFields: CollectionConfig["fields"] = [
   {
@@ -65,6 +66,9 @@ const Configurations: CollectionConfig = {
     update: isAdminOrConfigurationsOwner,
     delete: isAdminOrConfigurationsOwner,
     create: isAdmin
+  },
+  hooks: {
+    afterChange: [setConfigurationsOnCompany]
   },
   fields: ConfigurationFields,
   timestamps: false,

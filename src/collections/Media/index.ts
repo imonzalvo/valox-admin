@@ -26,7 +26,7 @@ const Media: CollectionConfig = {
         position: "centre",
         formatOptions: {
           format: "webp",
-          options: { quality: 15, alphaQuality: 20},
+          options: { quality: 60, alphaQuality: 50},
         }
       },
       {

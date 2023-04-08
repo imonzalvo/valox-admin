@@ -5,6 +5,18 @@ const Categories: CollectionConfig = {
   slug: "categories",
   admin: {
     useAsTitle: "name",
+    group: "eCommerce",
+    defaultColumns: ["name"]
+  },
+  labels: {
+    singular: {
+      es: "Categoría",
+      en: "Category"
+    },
+    plural: {
+      es: "Categorías",
+      en: "Categories"
+    }
   },
   access: {
     // Admins can read all, but any other logged in user can only read themselves
@@ -18,6 +30,10 @@ const Categories: CollectionConfig = {
     {
       name: "name",
       type: "text",
+      label: {
+        en: "Name",
+        es: "Nombre",
+      },
     },
     {
       name: "company",

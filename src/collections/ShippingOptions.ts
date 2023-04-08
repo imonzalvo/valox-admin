@@ -5,6 +5,17 @@ const ShippingOptions: CollectionConfig = {
   slug: "shippingOptions",
   admin: {
     useAsTitle: "name",
+    group: "General",
+  },
+  labels: {
+    singular: {
+      es: "Metodo de envío",
+      en: "Shipping Option",
+    },
+    plural: {
+      es: "Metodos de envío",
+      en: "Shipping Options",
+    },
   },
   access: {
     read: () => true,
@@ -28,7 +39,7 @@ const ShippingOptions: CollectionConfig = {
         en: "Description",
         es: "Descripción",
       },
-    }
+    },
   ],
   timestamps: false,
 };

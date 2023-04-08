@@ -96,13 +96,22 @@ export default async (req: Request, res: Response, next) => {
       data: orderData,
     });
 
+    payload.sendEmail({
+      to: clientInfo.clientEmail,
+      from: "admin@mitienda.io",
+      subject: `Compra ${configutarions.name}`,
+      html: `<div>
+               <h1>Orden confirmada en ${configutarions.name}</h1>
+             </div>`,
+    });
+
     res.send(createdOrder);
   } catch (e) {
     return next(e);
   }
 };
 
-const buildClientInfoFromDto = (orderDto: OrderDto) => {
+const buildClientInfoFromDto: any = (orderDto: OrderDto) => {
   const clientWhitelist = [
     "clientName",
     "clientLastName",

@@ -47,6 +47,17 @@ const Orders: CollectionConfig = {
     defaultColumns: ["createdAt", "status", "clientName"],
     useAsTitle: "createdAt",
     disableDuplicate: true,
+    group: "eCommerce",
+  },
+  labels: {
+    singular: {
+      es: "Orden",
+      en: "Order"
+    },
+    plural: {
+      es: "Ordenes",
+      en: "Orders"
+    }
   },
   access: {
     create: isAdmin,

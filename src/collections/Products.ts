@@ -6,6 +6,17 @@ const Products: CollectionConfig = {
   admin: {
     defaultColumns: ["title", "price"],
     useAsTitle: "Productos",
+    group: "eCommerce",
+  },
+  labels: {
+    singular: {
+      es: "Producto",
+      en: "Product"
+    },
+    plural: {
+      es: "Productos",
+      en: "Products"
+    }
   },
   access: {
     // Admins can read all, but any other logged in user can only read themselves
@@ -69,6 +80,10 @@ const Products: CollectionConfig = {
           relationTo: "media",
           maxDepth: 3,
           required: true,
+          label: {
+            en: "Image",
+            es: "Imagen",
+          },
         },
       ],
       label: {

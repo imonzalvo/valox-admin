@@ -23,6 +23,17 @@ export const ConfigurationFields: CollectionConfig["fields"] = [
     },
   },
   {
+    name: "title",
+    type: "text",
+    admin: {
+      placeholder: "El mejor eCommerce",
+    },
+    label: {
+      en: "Title",
+      es: "Encabezado de la pagina",
+    },
+  },
+  {
     name: "image",
     type: "upload",
     relationTo: "media",
@@ -38,21 +49,64 @@ export const ConfigurationFields: CollectionConfig["fields"] = [
     type: "relationship",
     relationTo: "companies",
     defaultValue: ({ user }) => user.company,
+    admin: {
+      hidden: true
+    }
+  },
+  {
+    name: "generalInformation",
+    type: "group",
+    fields: [
+      {
+        name: "phone",
+        type: "text",
+        label: {
+          en: "Phone",
+          es: "Telefono",
+        },
+      },
+      {
+        name: "address",
+        type: "text",
+        label: {
+          en: "Address",
+          es: "Dirección",
+        },
+      },
+      {
+        name: "links",
+        type: "group",
+        fields: [
+          {
+            name: "instagram",
+            type: "text",
+          },
+          {
+            name: "twitter",
+            type: "text",
+          },
+          {
+            name: "facebook",
+            type: "text",
+          },
+        ],
+      },
+    ],
   },
   {
     type: "tabs",
     tabs: [
-        {
-            description: "Metodos de envío habilitados para sus compras",
-            label: "Metodos de envío",
-            fields: [ShippingOptionsField]
-        },
-        {
-            description: "Metodos de Pago habilitados para sus compras",
-            label: "Metodos de Pago",
-            fields: [PaymentMethodsField]
-        }
-    ]
+      {
+        description: "Metodos de envío habilitados para sus compras",
+        label: "Metodos de envío",
+        fields: [ShippingOptionsField],
+      },
+      {
+        description: "Metodos de Pago habilitados para sus compras",
+        label: "Metodos de Pago",
+        fields: [PaymentMethodsField],
+      },
+    ],
   },
 ];
 
@@ -60,15 +114,26 @@ const Configurations: CollectionConfig = {
   slug: "configurations",
   admin: {
     useAsTitle: "name",
+    group: "eCommerce",
+  },
+  labels: {
+    singular: {
+      es: "Configuración",
+      en: "Configuration",
+    },
+    plural: {
+      es: "Configuraciones",
+      en: "Configurations",
+    },
   },
   access: {
     read: isAdminOrConfigurationsOwner,
     update: isAdminOrConfigurationsOwner,
     delete: isAdminOrConfigurationsOwner,
-    create: isAdmin
+    create: isAdmin,
   },
   hooks: {
-    afterChange: [setConfigurationsOnCompany]
+    afterChange: [setConfigurationsOnCompany],
   },
   fields: ConfigurationFields,
   timestamps: false,

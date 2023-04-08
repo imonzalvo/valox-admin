@@ -33,6 +33,17 @@ const PaymentMethods: CollectionConfig = {
   slug: "paymentMethods",
   admin: {
     useAsTitle: "name",
+    group: "General",
+  },
+  labels: {
+    singular: {
+      es: "Método de pago",
+      en: "Payment Method",
+    },
+    plural: {
+      es: "Métodos de pago",
+      en: "Payment Methods",
+    },
   },
   access: {
     read: () => true,

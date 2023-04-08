@@ -1,0 +1,3 @@
+.dashboard__card-list li:has(#card-users), #nav-users { display: none; }
+.dashboard__card-list li:has(#card-media), #nav-media { display: none; }
+.dashboard__card-list li:has(#card-companies), #nav-companies { display: none; }

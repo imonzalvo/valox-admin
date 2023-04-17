@@ -43,8 +43,7 @@ const Companies: CollectionConfig = {
       path: "/handle/:handle",
       method: "get",
       handler: async (req, res, next) => {
-        console.log("req", req.params.handle)
-        if(req.params.handle == "<no source>") {
+        if (req.params.handle == "<no source>") {
           return;
         }
         const companyQuery = await req.payload.find({
@@ -58,8 +57,6 @@ const Companies: CollectionConfig = {
         }
 
         const company = companyQuery.docs[0];
-
-        console.log("Company", req.params)
 
         const configurations = await req.payload.find({
           collection: "configurations",
@@ -104,6 +101,7 @@ const getProducts = async (req, res, categories) => {
     where: {
       category: { in: categoriesIds },
     },
+    limit: 12,
   });
 
   if (!productsQuery) {

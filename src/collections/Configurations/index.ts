@@ -34,6 +34,17 @@ export const ConfigurationFields: CollectionConfig["fields"] = [
     },
   },
   {
+    name: "subtitle",
+    type: "text",
+    admin: {
+      placeholder: "Manualidades hechas en casa",
+    },
+    label: {
+      en: "Subtitle",
+      es: "Subtitulo",
+    },
+  },
+  {
     name: "image",
     type: "upload",
     relationTo: "media",

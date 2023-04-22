@@ -68,6 +68,8 @@ const Companies: CollectionConfig = {
         const categories = await getCategories(req, res, company.id);
         const products = await getProducts(req, res, categories);
 
+        console.log("hola", categories)
+
         const categoriesTrees = await getCategoriesTrees(company.id);
         res.status(200).send({
           company,

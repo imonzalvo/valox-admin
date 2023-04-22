@@ -59,10 +59,10 @@ export const ConfigurationFields: CollectionConfig["fields"] = [
     saveToJWT: true,
     type: "relationship",
     relationTo: "companies",
-    defaultValue: ({ user }) => user.company,
+    // defaultValue: ({ user }) => user.company,
     admin: {
-      hidden: true
-    }
+      // hidden: true
+    },
   },
   {
     name: "generalInformation",
@@ -115,7 +115,37 @@ export const ConfigurationFields: CollectionConfig["fields"] = [
       {
         description: "Metodos de Pago habilitados para sus compras",
         label: "Metodos de Pago",
-        fields: [PaymentMethodsField],
+        fields: [
+          {
+            name: "mercadoPagoPublicKey",
+            type: "text",
+            label: "MercadoPago Public Key (Opcional)",
+          },
+          PaymentMethodsField,
+          {
+            name: "bankAccount",
+            type: "group",
+            label:
+              "Cuenta Bancaria para recibir pagos mediante transerencia (Opcional)",
+            fields: [
+              {
+                type: "row",
+                fields: [
+                  {
+                    name: "bank",
+                    type: "text",
+                    label: "Banco",
+                  },
+                  {
+                    name: "number",
+                    type: "text",
+                    label: "Nro de cuenta",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
   },

@@ -3,6 +3,9 @@ import { renameMedia } from "./hooks/renameMedia";
 
 const Media: CollectionConfig = {
   slug: "media",
+  admin: {
+    group: "General",
+  },
   access: {
     read: () => true,
   },

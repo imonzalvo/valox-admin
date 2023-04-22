@@ -1,16 +1,13 @@
-// import nodemailer from 'nodemailer';
+import payload from "payload";
 
-// var transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//       user: 'ignaciomonzalvo@gmail.com',
-//       pass: 'melinas1'
-//     }
-//   });
-  
-//   var mailOptions = {
-//     from: 'ignaciomonzalvo@gmail.com',
-//     to: 'myfriend@yahoo.com',
-//     subject: 'Sending Email using Node.js',
-//     text: 'That was easy!'
-//   };
+export const sendPurchaseConfirmationEmail = (
+  emailTo: string,
+  business: string
+) => {
+  payload.sendEmail({
+    to: emailTo,
+    from: "admin@mitienda.io",
+    subject: `Compra ${business}`,
+    html: `<h1>Compra ${business}</h1>`,
+  });
+};

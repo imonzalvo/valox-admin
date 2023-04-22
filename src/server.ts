@@ -1,8 +1,8 @@
 import express from "express";
 import payload from "payload";
-import createPaymentEntrypoint from './api/entrypoints/createPayment';
-import createOrderEntrypoint from './api/entrypoints/createOrder';
-import createRoutes from './router';
+import createPaymentEntrypoint from "./api/entrypoints/createPayment";
+import createOrderEntrypoint from "./api/entrypoints/createOrder";
+import createRoutes from "./router";
 
 require("dotenv").config();
 
@@ -43,6 +43,22 @@ payload.init({
   secret: process.env.PAYLOAD_SECRET,
   mongoURL: process.env.MONGODB_URI,
   express: app,
+  email: {
+    fromName: "MiTienda",
+    fromAddress: "admin@mitienda.io",
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+      port: 587,
+      secure: false, // use TLS
+      tls: {
+        rejectUnauthorized: false,
+      },
+    },
+  },
   onInit: () => {
     payload.logger.info(`Payload Admin URL: ${payload.getAdminURL()}`);
   },

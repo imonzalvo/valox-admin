@@ -45,6 +45,7 @@ export default buildConfig({
   ],
   admin: {
     user: Users.slug,
+    css: path.resolve(__dirname, './stylesheet.scss'),
   },
   collections: [
     Categories,

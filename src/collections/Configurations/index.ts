@@ -23,6 +23,28 @@ export const ConfigurationFields: CollectionConfig["fields"] = [
     },
   },
   {
+    name: "title",
+    type: "text",
+    admin: {
+      placeholder: "El mejor eCommerce",
+    },
+    label: {
+      en: "Title",
+      es: "Encabezado de la pagina",
+    },
+  },
+  {
+    name: "subtitle",
+    type: "text",
+    admin: {
+      placeholder: "Manualidades hechas en casa",
+    },
+    label: {
+      en: "Subtitle",
+      es: "Subtitulo",
+    },
+  },
+  {
     name: "image",
     type: "upload",
     relationTo: "media",
@@ -37,22 +59,95 @@ export const ConfigurationFields: CollectionConfig["fields"] = [
     saveToJWT: true,
     type: "relationship",
     relationTo: "companies",
-    defaultValue: ({ user }) => user.company,
+    // defaultValue: ({ user }) => user.company,
+    admin: {
+      // hidden: true
+    },
+  },
+  {
+    name: "generalInformation",
+    type: "group",
+    fields: [
+      {
+        name: "phone",
+        type: "text",
+        label: {
+          en: "Phone",
+          es: "Telefono",
+        },
+      },
+      {
+        name: "address",
+        type: "text",
+        label: {
+          en: "Address",
+          es: "Dirección",
+        },
+      },
+      {
+        name: "links",
+        type: "group",
+        fields: [
+          {
+            name: "instagram",
+            type: "text",
+          },
+          {
+            name: "twitter",
+            type: "text",
+          },
+          {
+            name: "facebook",
+            type: "text",
+          },
+        ],
+      },
+    ],
   },
   {
     type: "tabs",
     tabs: [
-        {
-            description: "Metodos de envío habilitados para sus compras",
-            label: "Metodos de envío",
-            fields: [ShippingOptionsField]
-        },
-        {
-            description: "Metodos de Pago habilitados para sus compras",
-            label: "Metodos de Pago",
-            fields: [PaymentMethodsField]
-        }
-    ]
+      {
+        description: "Metodos de envío habilitados para sus compras",
+        label: "Metodos de envío",
+        fields: [ShippingOptionsField],
+      },
+      {
+        description: "Metodos de Pago habilitados para sus compras",
+        label: "Metodos de Pago",
+        fields: [
+          {
+            name: "mercadoPagoPublicKey",
+            type: "text",
+            label: "MercadoPago Public Key (Opcional)",
+          },
+          PaymentMethodsField,
+          {
+            name: "bankAccount",
+            type: "group",
+            label:
+              "Cuenta Bancaria para recibir pagos mediante transerencia (Opcional)",
+            fields: [
+              {
+                type: "row",
+                fields: [
+                  {
+                    name: "bank",
+                    type: "text",
+                    label: "Banco",
+                  },
+                  {
+                    name: "number",
+                    type: "text",
+                    label: "Nro de cuenta",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
 ];
 
@@ -60,15 +155,26 @@ const Configurations: CollectionConfig = {
   slug: "configurations",
   admin: {
     useAsTitle: "name",
+    group: "eCommerce",
+  },
+  labels: {
+    singular: {
+      es: "Configuración",
+      en: "Configuration",
+    },
+    plural: {
+      es: "Configuraciones",
+      en: "Configurations",
+    },
   },
   access: {
     read: isAdminOrConfigurationsOwner,
     update: isAdminOrConfigurationsOwner,
     delete: isAdminOrConfigurationsOwner,
-    create: isAdmin
+    create: isAdmin,
   },
   hooks: {
-    afterChange: [setConfigurationsOnCompany]
+    afterChange: [setConfigurationsOnCompany],
   },
   fields: ConfigurationFields,
   timestamps: false,

@@ -5,7 +5,7 @@ import { getCategoriesTrees } from "../api/services/categories";
 const Companies: CollectionConfig = {
   slug: "companies",
   admin: {
-    useAsTitle: "handle",
+    useAsTitle: "name",
   },
   access: {
     // Admins can read all, but any other logged in user can only read themselves
@@ -43,13 +43,17 @@ const Companies: CollectionConfig = {
       path: "/handle/:handle",
       method: "get",
       handler: async (req, res, next) => {
+        if (req.params.handle == "<no source>") {
+          return;
+        }
         const companyQuery = await req.payload.find({
           collection: "companies",
           where: { handle: { equals: req.params.handle } },
         });
 
-        if (!companyQuery || !companyQuery.docs[0]) {
+        if (!companyQuery || !companyQuery.docs.length) {
           res.status(404).send({ error: "not found" });
+          return;
         }
 
         const company = companyQuery.docs[0];
@@ -63,6 +67,8 @@ const Companies: CollectionConfig = {
 
         const categories = await getCategories(req, res, company.id);
         const products = await getProducts(req, res, categories);
+
+        console.log("hola", categories)
 
         const categoriesTrees = await getCategoriesTrees(company.id);
         res.status(200).send({
@@ -97,6 +103,7 @@ const getProducts = async (req, res, categories) => {
     where: {
       category: { in: categoriesIds },
     },
+    limit: 12,
   });
 
   if (!productsQuery) {

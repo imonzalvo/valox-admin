@@ -101,14 +101,51 @@ export default async (req: Request, res: Response, next) => {
       from: "admin@mitienda.io",
       subject: `Compra ${configutarions.name}`,
       html: `<div>
-               <h1>Orden confirmada en ${configutarions.name}</h1>
-             </div>`,
+      <h1>Orden confirmada en ${configutarions.name}!</h1>
+      <div>
+      ${getProductsHTML(orderProducts)}
+       <h3>Envio</h3>
+         <div><span>${shippingOption.shippingOption.name} - $ ${
+        shippingOption.cost
+      }</span><div>
+         <div><span>${shippingOption.shippingOption.description}</span><div>
+         
+       <h3>Pago</h3>
+           <div><span>${paymentMethod.paymentMethod.name} - $ ${
+        paymentMethod.cost
+      }</span><div>
+      <div><span>${paymentMethod.paymentMethod.description}</span><div>
+      ${getBankDetails(company)}
+       <h3>Total</h3>
+         <div><span>$ ${totalAmount}</span><div>
+      </div>
+    </div>`,
     });
 
     res.send(createdOrder);
   } catch (e) {
     return next(e);
   }
+};
+
+const getBankDetails = (company) => {
+  return company.configurations.bankAccount
+    ? `<h4>Cuenta bancaria</h4>
+  <div>
+  ${company.configurations.bankAccount.bank}: ${company.configurations.bankAccount.number}
+  </div>`
+    : "";
+};
+
+const getProductsHTML = (products) => {
+  const productList = products.map((product) => {
+    return `<div><span>${product.title} (${product.quantity})- $ ${product.unitPrice}</span><div>`;
+  });
+
+  return `
+  <h3>Productos</h3>
+  ${productList}
+  `;
 };
 
 const buildClientInfoFromDto: any = (orderDto: OrderDto) => {

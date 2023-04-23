@@ -15,7 +15,6 @@ export default async (req, res) => {
       "Content-Type": "application/json",
     },
   };
-  console.log("req.body", req.body);
   const mercadoPagoRequest = {
     description: `Compra ${companyHandle.toLocaleUpperCase()}`,
     installments: req.body.installments,

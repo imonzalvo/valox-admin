@@ -17,6 +17,7 @@ const Media: CollectionConfig = {
     staticURL: "/media",
     staticDir: "media",
     disableLocalStorage: true,
+    mimeTypes: ['image/png, image/jpg', 'image/jpeg'], 
     formatOptions: {
       format: "webp",
       options: { quality: 60, alphaQuality: 50},
